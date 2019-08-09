@@ -1,0 +1,28 @@
+version: '3'
+services:
+  mongo:
+    container_name: todo-db
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - /data/mongodb/db:/data/db
+  server:
+    container_name: todo-server
+    build: ./server
+    ports:
+      - "4000:4000"
+    links:
+      - mongo
+    depends_on:
+      - mongo
+    command: npm run dev
+  client:
+    container_name: todo-client
+    build: ./client
+    ports:
+      - "3000:3000"
+    command: npm run start
+    links:
+      - server
+
